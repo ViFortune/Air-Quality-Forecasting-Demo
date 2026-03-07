@@ -202,7 +202,16 @@ def crawl_data(dir, date=30, type=0):
             "added_columns": add_col
         }
         
-        response = requests.post(url=url, data=data)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0",
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+            "Accept-Encoding": "gzip, deflate, br, zstd",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "Connection": "keep-alive"
+        }
+
+        response = requests.post(url=url, data=data, headers=headers, timeout=30)
 
         if response.status_code == 200:
 

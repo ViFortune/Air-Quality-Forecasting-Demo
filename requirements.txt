@@ -1,3 +1,5 @@
+seaborn
+scikit-learn
 Flask
 numpy
 joblib
