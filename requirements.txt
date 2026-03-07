@@ -1,0 +1,8 @@
+Flask
+numpy
+joblib
+apscheduler==3.11.1
+requests
+pandas
+matplotlib
+torch

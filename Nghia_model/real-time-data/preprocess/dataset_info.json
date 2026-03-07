@@ -1,0 +1,16 @@
+{
+    "0": {
+        "file_name": "HN_NguyenVanCu_28560877461938780203765592307.csv",
+        "region": "north",
+        "n_records": 18,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ]
+    }
+}

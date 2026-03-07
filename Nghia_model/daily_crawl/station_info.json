@@ -1,0 +1,273 @@
+{
+    "num_stations": 45,
+    "0": {
+        "address": "Số 556 đ. Nguyễn Văn Cừ, Q.Long Biên, TP Hà Nội",
+        "station_name": "Hà Nội: 556 Nguyễn Văn Cừ (KK)",
+        "id": "28560877461938780203765592307",
+        "alias": "HN_NguyenVanCu_28560877461938780203765592307"
+    },
+    "1": {
+        "address": "Khuôn viên trường Đại học Bách khoa Hà Nội, nóc nhà Bảo vệ cạnh cổng Parabol, đường Giải phóng, quận Hai Bà Trưng, Hà Nội",
+        "station_name": "Hà Nội: ĐHBK cổng Parabol đường Giải Phóng (KK)",
+        "id": "31390903576425084107499649578",
+        "alias": "HN_DHBK_GiaiPhong_31390903576425084107499649578"
+    },
+    "2": {
+        "address": "Công viên Thanh Xuân (trước đây là Vườn hoa Thanh Xuân thuộc Công viên hồ điều hòa Nhân Chính), gần ngã 3 đường Hoàng Ngân - Khu",
+        "station_name": "Hà Nội: Công viên Nhân Chính - Khuất Duy Tiến (KK)",
+        "id": "31390908889087377344742439468",
+        "alias": "HN_NhanChinh_KhuatDuyTien_31390908889087377344742439468"
+    },
+    "3": {
+        "address": "Khuôn viên của Làng trẻ SOS Nha Trang, tại đường 2/4 – phường Vĩnh Hòa",
+        "station_name": "Khánh Hòa: P. Vĩnh Hòa - Nha Trang (KK)",
+        "id": "28505263793630246854465636760",
+        "alias": "KH_VinhHoa_NhaTrang_28505263793630246854465636760"
+    },
+    "4": {
+        "address": "Khuôn viên của Công ty xăng dầu Phú Thọ tại đường Hùng Vương, thành phố Việt Trì",
+        "station_name": "Phú Thọ: đường Hùng Vương - Tp Việt Trì (KK)",
+        "id": "28505268571336961948594948504",
+        "alias": "PT_HungVuong_VietTri_28505268571336961948594948504"
+    },
+    "5": {
+        "address": "Khuôn viên của Trường Đại học Đà Nẵng, số 41 – Lê Duẩn",
+        "station_name": "Đà Nẵng: 41 đường Lê Duẩn (KK)",
+        "id": "28505272740301122608933325208",
+        "alias": "DN_LeDuan_28505272740301122608933325208"
+    },
+    "6": {
+        "address": "Khuôn viên của Trường Cao đẳng sư phạm Huế tại số 82 đường Hùng Vương, thành phố Huế",
+        "station_name": "Thừa Thiên Huế: 83 đường Hùng Vương (KK)",
+        "id": "28505511563898617211441001382",
+        "alias": "HUE_HungVuong_28505511563898617211441001382"
+    },
+    "7": {
+        "address": "Phường Cẩm Thịnh, TP Cẩm Phả, tỉnh Quảng Ninh",
+        "station_name": "Quảng Ninh: Phường Cẩm Thịnh - Cẩm Phả (KK)",
+        "id": "28599103930259709512833128161",
+        "alias": "QN_CamThinh_CamPha_28599103930259709512833128161"
+    },
+    "8": {
+        "address": "xã Bình Định, huyện Lương Tài, tỉnh Bắc Ninh.",
+        "station_name": "Bắc Ninh: trạm y tế xã Bình Định  - Lương Tài (KK)",
+        "id": "28916737403292956519734599224",
+        "alias": "BN_BinhDinh_LuongTai_28916737403292956519734599224"
+    },
+    "9": {
+        "address": "xã Dân Thành, TX Duyên Hải, tỉnh Trà Vinh",
+        "station_name": "Trà Vinh: xã Dân Thành, TX Duyên Hải (KK)",
+        "id": "29098314940209976158571475636",
+        "alias": "TV_DanThanh_DuyenHai_29098314940209976158571475636"
+    },
+    "10": {
+        "address": "xã Đông Hải, huyện Duyên Hải, tỉnh Trà Vinh",
+        "station_name": "Trà Vinh: xã Đông Hải, huyện Duyên Hải (KK)",
+        "id": "29098319146067624969113973428",
+        "alias": "TV_DongHai_DuyenHai_29098319146067624969113973428"
+    },
+    "11": {
+        "address": "Số 236 Phạm Văn Đồng, phường Thống Nhất, TP. Pleiku, Gia Lai",
+        "station_name": "Gia Lai: P.Thống Nhất - TP Pleiku (KK)",
+        "id": "29195656305758116592031767398",
+        "alias": "GL_ThongNhat_Pleiku_29195656305758116592031767398"
+    },
+    "12": {
+        "address": "số 10 đường Hùng Vương, phường Trưng Vương, TP Thái Nguyên",
+        "station_name": "Thái nguyên: Đường Hùng Vương - Tp Thái Nguyên (KK)",
+        "id": "29195707587706641566224751462",
+        "alias": "TN_HungVuong_29195707587706641566224751462"
+    },
+    "13": {
+        "address": "Số 11, đường Hai Bà Trưng, Phường Suối Hoa, Thành phố Bắc Ninh, Tỉnh Bắc Ninh",
+        "station_name": "Bắc Ninh: TT Quan trắc - phường Suối Hoa - TP Bắc Ninh (KK)",
+        "id": "29196010501691076420299004774",
+        "alias": "BN_SuoiHoa_BacNinh_29196010501691076420299004774"
+    },
+    "14": {
+        "address": "UBND xã Cao Đức, huyện Gia Bình, tỉnh Bắc Ninh",
+        "station_name": "Bắc Ninh: UBND xã Cao Đức - Gia Bình (KK)",
+        "id": "29196021237696127337075448678",
+        "alias": "BN_CaoDuc_GiaBinh_29196021237696127337075448678"
+    },
+    "15": {
+        "address": "xã Thái Thọ, huyện Thái Thụy, tỉnh Thái Bình",
+        "station_name": "Thái Bình: xã Thái Thọ, huyện Thái Thụy (KK)",
+        "id": "29203727697074312726675247132",
+        "alias": "TB_ThaiTho_ThaiThuy_29203727697074312726675247132"
+    },
+    "16": {
+        "address": "Đường số 2, KCN Trà Đa, xã Trà Đa, Tp. Pleiku, Gia Lai",
+        "station_name": "Gia Lai: KCN Trà Đa - Tp Pleiku (KK)",
+        "id": "29544533341424688633522251105",
+        "alias": "GL_TraDa_Pleiku_29544533341424688633522251105"
+    },
+    "17": {
+        "address": "Nhà văn hóa xã Tân Quang - Văn Lâm - Hưng Yên",
+        "station_name": "Hưng Yên: Nhà văn hóa xã Tân Quang - h.Văn Lâm (KK)",
+        "id": "29828513366380889034790000096",
+        "alias": "HY_TanQuang_VanLam_29828513366380889034790000096"
+    },
+    "18": {
+        "address": "Địa chỉ: Số 437 Nguyễn Văn Linh  - Thành phố Hưng Yên",
+        "station_name": "Hưng Yên: Trạm khí xung quanh KCN Thăng long II (KK)",
+        "id": "29936546593921360616662752773",
+        "alias": "HY_KCN_ThangLongII_29936546593921360616662752773"
+    },
+    "19": {
+        "address": "Thị xã Trảng Bàng, Tây Ninh",
+        "station_name": "Tây Ninh: Thị xã Trảng Bàng (KK)",
+        "id": "29996239538320865599553202177",
+        "alias": "TN_TrangBang_29996239538320865599553202177"
+    },
+    "20": {
+        "address": "Huyện Chư Sê, tỉnh Gia Lai",
+        "station_name": "Gia lai: Chư Sê (KK)",
+        "id": "30487895627496546123240481728",
+        "alias": "GL_ChuSe_30487895627496546123240481728"
+    },
+    "21": {
+        "address": "Tp. Trà Vinh, tỉnh Trà Vinh",
+        "station_name": "Trà Vinh: Tp. Trà Vinh (KK)",
+        "id": "30921862678974937849512304668",
+        "alias": "TV_TraVinh_30921862678974937849512304668"
+    },
+    "22": {
+        "address": "Khuôn viên khu liên cơ quan tỉnh Bắc Giang, phường Ngô Quyền, thành phố Bắc Giang, tỉnh Bắc Giang",
+        "station_name": "Bắc Giang: Khu liên cơ quan tỉnh Bắc Giang - P. Ngô Quyền - TP. Bắc Giang (KK)",
+        "id": "31387251434693138681789561386",
+        "alias": "BG_NgoQuyen_BacGiang_31387251434693138681789561386"
+    },
+    "23": {
+        "address": "Khuôn viên cây xanh gần cầu chui đường Hoa Lư, phía Nam Cầu Hà Thanh 1, phường Đống Đa, thành phố Quy Nhơn, tỉnh Bình Định",
+        "station_name": "Bình Định: Khuôn viên Cây xanh gần cầu chui đường Hoa Lư - TP. Quy Nhơn (KK)",
+        "id": "31388836637198369136462150188",
+        "alias": "BD_HoaLu_QuyNhon_31388836637198369136462150188"
+    },
+    "24": {
+        "address": "Trường THPT chuyên Hùng Vương, số 593 Đại lộ Bình Dương, phường Hiệp Thành, thành phố Thủ Dầu Một, Bình Dương",
+        "station_name": "Bình Dương: số 593 Đại lộ Bình Dương, P. Hiệp Thành (KK)",
+        "id": "31388839920718814259329251882",
+        "alias": "BD_BinhDuong_HiepThanh_31388839920718814259329251882"
+    },
+    "25": {
+        "address": "Khuôn viên trường đại học sư phạm Đà Nẵng, số 459 Tôn Đức Thắng, Hòa Khánh Nam, Liên Chiểu, Đà Nẵng",
+        "station_name": "Đà Nẵng: Khuôn viên trường ĐH sư phạm Đà Nẵng (KK)",
+        "id": "31388851800421997746903202346",
+        "alias": "DN_DHSP_31388851800421997746903202346"
+    },
+    "26": {
+        "address": "UBND thành phố Hải Dương, số 106 đường Trần Hưng Đạo, phường Trần Hưng Đạo, thành phố Hải Dương",
+        "station_name": "Hải Dương: UBND TP. Hải Dương - 106 Đường Trần Hưng Đạo (KK)",
+        "id": "31388868531618872623864101418",
+        "alias": "HD_HaiDuong_TranHungDao_31388868531618872623864101418"
+    },
+    "27": {
+        "address": "Công Viên Nam Cao, Phường Quang Trung, thành phố Phủ Lý, Hà Nam",
+        "station_name": "Hà Nam: Công Viên Nam Cao - P.Quang Trung - TP. Phủ Lý (KK)",
+        "id": "31388883344354363840031242796",
+        "alias": "HN_NamCao_PhuLy_31388883344354363840031242796"
+    },
+    "28": {
+        "address": "Khuôn viên  Khu Liên cơ quan Bộ Tài Nguyên và Môi Trường, số 200, đường Lý Chính Thắng,  Phường 9, Quận 3, Thành phố Hồ Chí Minh",
+        "station_name": "HCM: Khu Liên cơ quan Bộ Tài Nguyên và Môi Trường - số 20 Đ. Lý Chính Thắng (KK)",
+        "id": "31390912357075263208060500522",
+        "alias": "HCM_LyChinhThang_31390912357075263208060500522"
+    },
+    "29": {
+        "address": "Đường Lê Hữu Kiều, Phường Bình Trưng Tây, Quận 2, Thành phố Hồ Chí Minh (Ngã ba Lê Hữu Kiểu và Trương Văn Bang)",
+        "station_name": "HCM: Đ. Lê Hữu Kiều - P. Bình Trưng Tây - Quận 2 (Ngã ba Lê Hữu Kiểu và Trương Văn Bang) (KK)",
+        "id": "31390916083317566102523755051",
+        "alias": "HCM_LeHuuKieu_Q2_31390916083317566102523755051"
+    },
+    "30": {
+        "address": "Sở Tài nguyên và Môi trường tỉnh Hưng Yên, số 437 Nguyễn Văn Linh, thành phố Hưng Yên, tỉnh Hưng Yên",
+        "station_name": "Hưng Yên: số 437 Nguyễn Văn Linh - Tp Hưng Yên (KK)",
+        "id": "31390921469766835629621918251",
+        "alias": "HY_NguyenVanLinh_HY_31390921469766835629621918251"
+    },
+    "31": {
+        "address": "Tại vườn hoa, đối diện trường THCS Lam Sơn, giáp đường Ngô Quyền và Thi Sách, phường 6, thành phố Đà Lạt, tỉnh Lâm Đồng",
+        "station_name": "Lâm Đồng: Vườn hoa - đối diện THCS Lam Sơn - Phường 6 - TP Đà Lạt (KK)",
+        "id": "31390928700890512538630765099",
+        "alias": "LD_VuonHoa_LamSon_31390928700890512538630765099"
+    },
+    "32": {
+        "address": "UBND thành phố Tân An, số 76 Hùng Vương, phường 2, Thành phố Tân An, tỉnh Long An",
+        "station_name": "Long An: UBND Tp Tân An - 76 Hùng Vương - P.2 (KK)",
+        "id": "31390932574706768021562473002",
+        "alias": "LA_TanAn_HungVuong_31390932574706768021562473002"
+    },
+    "33": {
+        "address": "Góc tường rào tiếp giáp đường Hùng Vương, khu vực dân cư đường Hồ Xuân Hương gần khu vực nhà xe của Trường THCS Lý Tự Trọng, Phư",
+        "station_name": "Quảng Nam: Tiếp giáp Đ. Hùng Vương - KDC Đ. Hồ Xuân Hương (KK)",
+        "id": "31390944251495766704153049642",
+        "alias": "QN_HungVuong_HoXuanHuong_31390944251495766704153049642"
+    },
+    "34": {
+        "address": "UBND phường Nguyễn Nghiêm, số 310 Nguyễn Nghiêm, Phường Nguyễn Nghiêm, Thành phố Quảng Ngãi, Tỉnh Quảng Ngãi",
+        "station_name": "Quảng Ngãi: UBND P. Nguyễn Nghiêm - TP Quảng Ngãi (KK)",
+        "id": "31390951371938979254287350314",
+        "alias": "QNG_NguyenNghiem_31390951371938979254287350314"
+    },
+    "35": {
+        "address": "Cầu Thái Bình, đường Trần Thái Tông, phường Bồ Xuyên, Thành phố Thái Bình",
+        "station_name": "Thái Bình: Cầu Thái Bình - Đ. Trần Thái Tông - P. Bồ Xuyên - TP Thái Bình (KK)",
+        "id": "31390957404024291365397346858",
+        "alias": "TB_ThaiBinh_TranThaiTong_31390957404024291365397346858"
+    },
+    "36": {
+        "address": "Đường Huyền Trân Công Chúa, Phường 8, TP Vũng tàu, Tỉnh BRVT (Mũi tàu đường Huyền Trân Công Chúa và Thống Nhất Mới)",
+        "station_name": "Vũng Tàu: Đ. Huyền Trân Công Chúa - Phường 8 - TP Vũng Tàu",
+        "id": "31390965631272148257054013994",
+        "alias": "VT_HuyenTranCongChua_P8_31390965631272148257054013994"
+    },
+    "37": {
+        "address": "Huyện Tuy Phước, tỉnh Bình Định",
+        "station_name": "Bình Định: huyện Tuy Phước (KK)",
+        "id": "31570631866920915749872483233",
+        "alias": "BD_TuyPhuoc_31570631866920915749872483233"
+    },
+    "38": {
+        "address": "tổ 7 phường Quan Triều, thành phố Thái Nguyên, tỉnh Thái Nguyên",
+        "station_name": "Thái Nguyên: Tổ 7 - Quan Triều - TP Thái Nguyên (KK)",
+        "id": "31651447211638215373862421720",
+        "alias": "TN_QuanTrieu_31651447211638215373862421720"
+    },
+    "39": {
+        "address": "Khu vực sân vận động Gang Thép thuộc tổ 8, phường Trung Thành, thành phố Thái Nguyên, tỉnh Thái Nguyên",
+        "station_name": "Thái Nguyên: Sân vận động Gang thép - P Trung Thành - TP Thái Nguyên (KK)",
+        "id": "31651502905690497791503780869",
+        "alias": "TN_GangThep_TrungThanh_31651502905690497791503780869"
+    },
+    "40": {
+        "address": "Thôn Vĩnh An - xã Song Mai - TP. Bắc Giang, tỉnh Bắc Giang",
+        "station_name": "Bắc Giang: Thôn Vĩnh An - xã Song Mai - TP. Bắc Giang (KK)",
+        "id": "32226856627901174291787516193",
+        "alias": "BG_VinhAn_SongMai_32226856627901174291787516193"
+    },
+    "41": {
+        "address": "Số 2 Trần Thánh Tông, Phường Quang Trung, Thành phố Nam Định, Tỉnh Nam Định",
+        "station_name": "Nam Định: Số 2 Trần Thánh Tông - P. Quang Trung (VT1) (KK)",
+        "id": "32364183997304919819454378150",
+        "alias": "ND_TranThanhTong_QuangTrung_32364183997304919819454378150"
+    },
+    "42": {
+        "address": "UBND xã Nam Vân có địa chỉ tại xóm 3 thôn Vân Cát, phường Nam Vân, thành phố Nam Định",
+        "station_name": "Nam Định: Thôn Vân Cát - P. Nam Vân - TP. Nam Định (VT2) (KK)",
+        "id": "32364190084730464143606411447",
+        "alias": "ND_VanCat_NamVan_32364190084730464143606411447"
+    },
+    "43": {
+        "address": "UBND phường Trường Thi có địa chỉ tại số 57/212, Trần Huy Liệu, phường Trường Thi, thành phố Nam Định, tỉnh Nam Định",
+        "station_name": "Nam Định: Đường Trần Huy Liệu - P. Trường Thi (VT3) (KK)",
+        "id": "32364194875996560076825514951",
+        "alias": "ND_TranHuyLieu_TruongThi_32364194875996560076825514951"
+    },
+    "44": {
+        "address": "Trường tiểu học Trần Nhân Tông có địa chỉ tại lô 29, đường Trương Hán Siêu, phường Lộc Hòa, thành phố Nam Định, tỉnh Nam Định.",
+        "station_name": "Nam Định: Lô 29 - đ. Trương Hán Siêu - P. Lộc Hòa (VT4) (KK)",
+        "id": "32364200193546216536440697093",
+        "alias": "ND_TruongHanSieu_LocHoa_32364200193546216536440697093"
+    }
+}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bản Đồ Dự Báo AQI (Đa Trạm)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        #map { height: 600px; border-radius: 1rem; z-index: 1; cursor: pointer; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="p-6">
+
+    <div class="max-w-7xl mx-auto mb-6 flex justify-between items-center bg-white p-4 rounded-xl shadow-md">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Bản Đồ Dự Báo AQI (Nghiên cứu Đa Trạm)</h1>
+            <p class="text-sm text-gray-500">Mô hình BiLSTM Dual Embedding - Dự báo 7 ngày tại các tỉnh thành</p>
+        </div>
+        <a href="{{ url_for('index') }}" class="bg-blue-100 hover:bg-blue-200 text-blue-800 font-semibold py-2 px-4 rounded-lg transition border border-blue-200">
+        Xem Nghiên cứu 1 Trạm (XGBoost)
+        </a>
+    </div>
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-white p-2 rounded-2xl shadow-lg border border-gray-200">
+            <div id="map"></div>
+            <p class="text-xs text-gray-500 mt-2 text-center italic">*Dữ liệu bản đồ đang tải... Hãy click vào tỉnh có dữ liệu.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 flex flex-col h-[600px]">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Kết quả Dự báo</h2>
+            
+            <div id="info-default" class="text-center py-20 text-gray-400">
+                <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <p>Hãy chọn một tỉnh trên bản đồ để xem dự báo</p>
+                <p class="text-sm text-red-400 mt-2 hidden" id="error-msg"></p>
+            </div>
+
+            <div id="info-loading" class="hidden flex flex-col items-center justify-center py-20">
+                <div class="loader mb-3"></div>
+                <p class="text-blue-600 font-semibold">AI đang phân tích dữ liệu...</p>
+            </div>
+
+            <div id="info-result" class="hidden flex-1 flex flex-col">
+                <h3 class="text-lg font-bold text-blue-700 mb-2" id="selected-province">Tỉnh...</h3>
+                <div class="flex-1 relative w-full h-full">
+                    <canvas id="chartDetail"></canvas>
+                </div>
+                <div class="mt-4 bg-blue-50 p-3 rounded-lg text-sm text-blue-800">
+                    <p><strong>Mô hình:</strong> Dual Embedding BiLSTM</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        const PROVINCE_MAPPING = {
+            "Bình Dương": "Binh Duong",
+            "Bình Định": "Binh Dinh",
+            "Bắc Giang": "Bac Giang",
+            "Đà Nẵng": "Da Nang",
+            "Gia Lai": "Gia Lai",
+            "Hà Nội": "Ha Noi",
+            "Hưng Yên": "Hung Yen",
+            "Lâm Đồng": "Lam Dong",
+            "Nam Định": "Nam Dinh",
+            "Phú Thọ": "Phu Tho",
+            "Quảng Nam": "Quang Nam",
+            "Thái Bình": "Thai Binh",
+            "Thái Nguyên": "Thai Nguyen",
+            "Trà Vinh": "Tra Vinh"
+        };
+
+        // Init Map
+        var map = L.map('map').setView([16.047079, 108.206230], 6);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var myChart = null;
+
+        // Load GeoJSON
+        fetch('/static/vn.json')
+            .then(res => res.json())
+            .then(data => {
+                L.geoJson(data, {
+                    style: { color: "#4f46e5", weight: 1, fillOpacity: 0.1 },
+                    onEachFeature: function(feature, layer) {
+                        layer.on('mouseover', function() { this.setStyle({ fillOpacity: 0.4, weight: 2 }); });
+                        layer.on('mouseout', function() { this.setStyle({ fillOpacity: 0.1, weight: 1 }); });
+                        
+                        layer.on('click', function() {
+                            // --- DEBUG: Kiểm tra xem tên thuộc tính là gì ---
+                            console.log("Dữ liệu Click:", feature.properties); 
+                            
+                            
+                            var rawName = feature.properties.name || feature.properties.Name || feature.properties.ten_tinh;
+                            
+                            if (!rawName) {
+                                alert("Lỗi: File GeoJSON không có trường tên tỉnh (Name)!");
+                                return;
+                            }
+
+                            // Chuyển đổi tên sang format model hiểu
+                            var modelName = PROVINCE_MAPPING[rawName];
+
+                            if (!modelName) {
+                                // Nếu không có trong map, thử gửi nguyên gốc hoặc báo lỗi
+                                console.warn("Chưa map tỉnh này:", rawName);
+                                alert("Dữ liệu huấn luyện chưa bao gồm tỉnh: " + rawName);
+                                return;
+                            }
+
+                            console.log("Gửi yêu cầu dự báo cho:", modelName);
+                            loadPrediction(modelName, rawName);
+                        });
+                    }
+                }).addTo(map);
+            })
+            .catch(err => {
+                console.error("Lỗi tải GeoJSON:", err);
+                alert("Không tải được bản đồ. Kiểm tra file static/vn.json");
+            });
+
+        function loadPrediction(modelProvinceName, displayName) {
+            // UI Update
+            document.getElementById('info-default').classList.add('hidden');
+            document.getElementById('info-result').classList.add('hidden');
+            document.getElementById('info-loading').classList.remove('hidden');
+            document.getElementById('error-msg').classList.add('hidden');
+
+            fetch('/api/predict_advanced', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ province: modelProvinceName })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('info-loading').classList.add('hidden');
+                
+                if(data.status === 'error') {
+                    document.getElementById('info-default').classList.remove('hidden');
+                    document.getElementById('error-msg').innerText = "Server báo lỗi: " + data.message;
+                    document.getElementById('error-msg').classList.remove('hidden');
+                    return;
+                }
+
+                document.getElementById('info-result').classList.remove('hidden');
+                document.getElementById('selected-province').innerText = displayName + " (" + data.province + ")";
+                renderChart(data.history, data.forecast);
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('info-loading').classList.add('hidden');
+                document.getElementById('info-default').classList.remove('hidden');
+                alert("Lỗi kết nối server Flask!");
+            });
+        }
+
+        function renderChart(history, forecast) {
+            const ctx = document.getElementById('chartDetail').getContext('2d');
+            
+            const labels = [...history.map(d => d.date), ...forecast.map(d => d.date)];
+            const histData = history.map(d => d.aqi);
+            
+            // Tạo mảng dữ liệu dự báo nối tiếp
+            const foreData = new Array(history.length - 1).fill(null);
+            if(history.length > 0) {
+                foreData.push(history[history.length-1].aqi); // Điểm nối
+            }
+            forecast.forEach(d => foreData.push(d.aqi));
+
+            if(myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { 
+                            label: 'Lịch sử', 
+                            data: histData, 
+                            borderColor: '#10b981', 
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        { 
+                            label: 'Dự báo AI', 
+                            data: foreData, 
+                            borderColor: '#ef4444', 
+                            borderDash: [5,5], 
+                            tension: 0.3,
+                            fill: false
+                        }
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                }
+            });
+        }
+    </script>
+</body>
+</html>

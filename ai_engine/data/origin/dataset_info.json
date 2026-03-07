@@ -1,0 +1,302 @@
+{
+    "0": {
+        "file_name": "BD_BinhDuong_HiepThanh_31388839920718814259329251882.csv",
+        "region": "south",
+        "n_records": 632,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Binh Duong"
+    },
+    "1": {
+        "file_name": "BD_HoaLu_QuyNhon_31388836637198369136462150188.csv",
+        "region": "middle",
+        "n_records": 646,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Binh Dinh"
+    },
+    "2": {
+        "file_name": "BD_TuyPhuoc_31570631866920915749872483233.csv",
+        "region": "middle",
+        "n_records": 422,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Binh Dinh"
+    },
+    "3": {
+        "file_name": "BG_VinhAn_SongMai_32226856627901174291787516193.csv",
+        "region": "north",
+        "n_records": 149,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Bac Giang"
+    },
+    "4": {
+        "file_name": "DN_DHSP_31388851800421997746903202346.csv",
+        "region": "middle",
+        "n_records": 650,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Da Nang"
+    },
+    "5": {
+        "file_name": "GL_ChuSe_30487895627496546123240481728.csv",
+        "region": "middle",
+        "n_records": 654,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Gia Lai"
+    },
+    "6": {
+        "file_name": "GL_TraDa_Pleiku_29544533341424688633522251105.csv",
+        "region": "middle",
+        "n_records": 1541,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Gia Lai"
+    },
+    "7": {
+        "file_name": "HN_NguyenVanCu_28560877461938780203765592307.csv",
+        "region": "north",
+        "n_records": 2436,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Ha Noi"
+    },
+    "8": {
+        "file_name": "HN_NhanChinh_KhuatDuyTien_31390908889087377344742439468.csv",
+        "region": "north",
+        "n_records": 634,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Ha Noi"
+    },
+    "9": {
+        "file_name": "HY_NguyenVanLinh_HY_31390921469766835629621918251.csv",
+        "region": "north",
+        "n_records": 625,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Hung Yen"
+    },
+    "10": {
+        "file_name": "HY_TanQuang_VanLam_29828513366380889034790000096.csv",
+        "region": "north",
+        "n_records": 921,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Hung Yen"
+    },
+    "11": {
+        "file_name": "LD_VuonHoa_LamSon_31390928700890512538630765099.csv",
+        "region": "middle",
+        "n_records": 657,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Lam Dong"
+    },
+    "12": {
+        "file_name": "ND_TranHuyLieu_TruongThi_32364194875996560076825514951.csv",
+        "region": "north",
+        "n_records": 57,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Nam Dinh"
+    },
+    "13": {
+        "file_name": "ND_TranThanhTong_QuangTrung_32364183997304919819454378150.csv",
+        "region": "north",
+        "n_records": 57,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Nam Dinh"
+    },
+    "14": {
+        "file_name": "ND_TruongHanSieu_LocHoa_32364200193546216536440697093.csv",
+        "region": "north",
+        "n_records": 57,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Nam Dinh"
+    },
+    "15": {
+        "file_name": "PT_HungVuong_VietTri_28505268571336961948594948504.csv",
+        "region": "north",
+        "n_records": 2157,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Phu Tho"
+    },
+    "16": {
+        "file_name": "QN_HungVuong_HoXuanHuong_31390944251495766704153049642.csv",
+        "region": "middle",
+        "n_records": 655,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Quang Nam"
+    },
+    "17": {
+        "file_name": "TB_ThaiBinh_TranThaiTong_31390957404024291365397346858.csv",
+        "region": "north",
+        "n_records": 671,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Thai Binh"
+    },
+    "18": {
+        "file_name": "TN_GangThep_TrungThanh_31651502905690497791503780869.csv",
+        "region": "north",
+        "n_records": 495,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Thai Nguyen"
+    },
+    "19": {
+        "file_name": "TV_TraVinh_30921862678974937849512304668.csv",
+        "region": "south",
+        "n_records": 863,
+        "header": [
+            "Date",
+            "VN_AQI",
+            "CO",
+            "NO2",
+            "PM-10",
+            "PM-2-5",
+            "SO2"
+        ],
+        "province": "Tra Vinh"
+    }
+}
