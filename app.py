@@ -175,6 +175,9 @@ def predict_advanced():
         return jsonify({'status': 'error', 'message': str(e)})
 
 if __name__ == '__main__':
-    run_pipeline()
-    start_scheduler()
-    app.run(debug=True, host='0.0.0.0', port=10000)
+    # run_pipeline()  <-- Xóa hoặc comment dòng này
+    start_scheduler() # Khởi động trình lập lịch
+    
+    # Lấy PORT từ biến môi trường của Render (mặc định 10000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(debug=False, host='0.0.0.0', port=port)

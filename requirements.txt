@@ -1,5 +1,7 @@
+python=3.10
 seaborn
-scikit-learn
+xgboost
+scikit-learn==1.7.2
 Flask
 numpy
 joblib
