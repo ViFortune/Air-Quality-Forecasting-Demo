@@ -1,8 +1,10 @@
 import requests
 import json
 import csv
+import pandas
 import datetime
 from pathlib import Path
+
 
 def crawl_data(dir, date=30, type=0):
     '''
@@ -16,8 +18,8 @@ def crawl_data(dir, date=30, type=0):
     url = f"https://envisoft.gov.vn/eip/default/call/json/get_aqi_data%3Fdate%3D{date}%26aqi_type%3D{type}"
 
     # get station_info object
-    with open("JSON/station_info.json", "r", encoding="utf-8") as f:
-        station_dict = json.load(f)
+    # with open("JSON/station_info.json", "r", encoding="utf-8") as f:
+    #     station_dict = json.load(f)
     
     # get number of stations
     # num_station = station_dict["num_stations"]
@@ -216,6 +218,11 @@ def crawl_data(dir, date=30, type=0):
         if response.status_code == 200:
 
             try: 
+                # result = response.json()
+                # aaData = result["aaData"]  # Array of array
+                # cols = ["STT","Date","VN_AQI"] + components
+                # df = pandas.DataFrame(data=aaData, columns=cols)
+                # print(df.head(n=30))
                 with open(f"{dir}{alias}.csv", "w", encoding='utf-8') as opened_csv:
                     writer = csv.writer(opened_csv)
                     # writer.writerow(["STT","Date","VN_AQI","Benzen","CH4","CO","Compass","EthylBenzen","HC","HCL","MMHC","Mp-Xylen","NMHC","NO","NO2","NO2","NOx","Oxylen","PM-10","PM-2-5","PX2-1","SO2","SO2","THC","Toluren","WinDir+(sai)"])
@@ -232,8 +239,8 @@ def crawl_data(dir, date=30, type=0):
 
             except ValueError:
                 print("Responsed value is not JSON format, store it as text")
-                with open(f"{dir}{alias}.csv", "w", encoding="utf-8") as opened_text:
-                    opened_text.write(response.text)
+                # with open(f"{dir}{alias}.csv", "w", encoding="utf-8") as opened_text:
+                #     opened_text.write(response.text)
 
         else:
             print(f"Error code: {response.status_code}!\n")

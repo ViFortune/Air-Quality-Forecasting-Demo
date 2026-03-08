@@ -175,7 +175,7 @@ def predict_advanced():
         return jsonify({'status': 'error', 'message': str(e)})
 
 if __name__ == '__main__':
-    # run_pipeline()  <-- Xóa hoặc comment dòng này
+    # run_pipeline() # <-- Xóa hoặc comment dòng này
     start_scheduler() # Khởi động trình lập lịch
     
     # Lấy PORT từ biến môi trường của Render (mặc định 10000)
