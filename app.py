@@ -10,6 +10,7 @@ try:
     from crawl import crawl_data
     from data_processor import drop_col, feature_engineering_and_preprocessing, prepare_data
     from plot_prediction import predict_next_7_days, visualize
+    from mongo_pipeline import mongo_pipeline
 except ImportError as e:
     print(f"Friend's Pipeline Import Error: {e}")
 
@@ -26,6 +27,7 @@ except Exception as e:
 data_dir = './data/'
 ckpts_dir = './model_nghia/XGBoost/ckpts/'
 plots_dir = './static/plots/'
+plot_dir_mongo = './static/plots/mongo/'
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -42,12 +44,15 @@ def run_pipeline():
     global LAST_RUN_TIME
     print("\n--- STARTING AUTOMATIC DATA PIPELINE ---")
     # try:
-    crawl_data(data_dir)
-    drop_col(data_dir)
-    feature_engineering_and_preprocessing(data_dir)
-    prepare_data(data_dir, data_dir + '/real_time_v1.pt')
-    dict_of_list = predict_next_7_days(ckpts_dir, data_dir)
-    visualize(plots_dir, data_dir, dict_of_list)
+
+    # crawl_data(data_dir)
+    # drop_col(data_dir)
+    # feature_engineering_and_preprocessing(data_dir)
+    # prepare_data(data_dir, data_dir + '/real_time_v1.pt')
+    # dict_of_list = predict_next_7_days(ckpts_dir, data_dir)
+    # visualize(plots_dir, data_dir, dict_of_list)
+    mongo_pipeline(ckpt_dir=ckpts_dir, plot_dir=plot_dir_mongo)
+
     LAST_RUN_TIME = datetime.now().strftime("%H:%M:%S ngày %d/%m/%Y")
     print(f"--- PIPELINE COMPLETE. LAST RAN: {LAST_RUN_TIME} ---")
     # except Exception as e:
@@ -69,7 +74,7 @@ def start_scheduler():
 
 @app.route('/')
 def index():
-    plots_folder = 'plots'
+    plots_folder = 'plots/mongo'
     pollutant_names = ['CO', 'PM-10', 'PM-2-5', 'SO2']
     plot_files = ['aqi_CO.png', 'aqi_PM-10.png', 'aqi_PM-2-5.png', 'aqi_SO2.png']
     
@@ -90,7 +95,7 @@ def run_now():
 
 @app.route('/plots/<filename>')
 def serve_plot(filename):
-    return send_from_directory(os.path.join(app.static_folder, 'plots'), filename)
+    return send_from_directory(os.path.join(app.static_folder, 'plots/mongo'), filename)
 
 
 # ==========================
@@ -175,7 +180,7 @@ def predict_advanced():
         return jsonify({'status': 'error', 'message': str(e)})
 
 if __name__ == '__main__':
-    # run_pipeline() # <-- Xóa hoặc comment dòng này
+    run_pipeline() # <-- Xóa hoặc comment dòng này
     start_scheduler() # Khởi động trình lập lịch
     
     # Lấy PORT từ biến môi trường của Render (mặc định 10000)
