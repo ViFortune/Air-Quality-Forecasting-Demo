@@ -89,7 +89,7 @@ def index():
 @app.route('/run_now')
 def run_now():
     global scheduler
-    flash('Pipeline đang chạy ngầm...', 'info')
+    flash('Thu thập dữ liệu và tiến hành dự đoán...', 'info')
     scheduler.add_job(func=run_pipeline, trigger='date', run_date=datetime.now() + timedelta(seconds=1))
     return redirect(url_for('index'))
 
