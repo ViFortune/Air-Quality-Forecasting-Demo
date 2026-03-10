@@ -5,7 +5,7 @@ numpy==1.26.4
 joblib==1.5.2
 apscheduler==3.11.1
 pandas==2.3.2
-torch==2.10.0+cu128
+torch==2.10.0
 pymongo==4.16.0
 
 Flask

@@ -7,10 +7,10 @@ from flask import Flask, render_template, send_from_directory, flash, redirect, 
 from apscheduler.schedulers.background import BackgroundScheduler
 
 try: 
-    from crawl import crawl_data
-    from data_processor import drop_col, feature_engineering_and_preprocessing, prepare_data
-    from plot_prediction import predict_next_7_days, visualize
-    from mongo_pipeline import mongo_pipeline
+    # from crawl import crawl_data
+    # from data_processor import drop_col, feature_engineering_and_preprocessing, prepare_data
+    # from plot_prediction import predict_next_7_days, visualize
+    from mongo_pipeline import mongo_pipeline, set_last_run_time, get_last_run_time
 except ImportError as e:
     print(f"Friend's Pipeline Import Error: {e}")
 
@@ -32,34 +32,36 @@ plot_dir_mongo = './static/plots/mongo/'
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
-LAST_RUN_TIME = "Have not run yet!"
+LAST_RUN_TIME = get_last_run_time()
+PLOT_DICT = None
 scheduler = None
+PIPELINE_STATUS = "idle"   # idle | running | done | error
 
 # ==========================
 # KHU VỰC 1: LOGIC CỦA NGHĨA
-# ==========================
+# ==========================        
 
 def run_pipeline():
     """Logic chạy pipeline cũ (XGBoost + Static Plots)"""
-    global LAST_RUN_TIME
+    global LAST_RUN_TIME, PLOT_DICT, PIPELINE_STATUS
+
     print("\n--- STARTING AUTOMATIC DATA PIPELINE ---")
-    # try:
+    PIPELINE_STATUS = "running"
 
-    # crawl_data(data_dir)
-    # drop_col(data_dir)
-    # feature_engineering_and_preprocessing(data_dir)
-    # prepare_data(data_dir, data_dir + '/real_time_v1.pt')
-    # dict_of_list = predict_next_7_days(ckpts_dir, data_dir)
-    # visualize(plots_dir, data_dir, dict_of_list)
-    mongo_pipeline(ckpt_dir=ckpts_dir, plot_dir=plot_dir_mongo)
+    try:
+        PLOT_DICT = mongo_pipeline(ckpt_dir=ckpts_dir, plot_dir=plot_dir_mongo)
 
-    LAST_RUN_TIME = datetime.now().strftime("%H:%M:%S ngày %d/%m/%Y")
-    print(f"--- PIPELINE COMPLETE. LAST RAN: {LAST_RUN_TIME} ---")
-    # except Exception as e:
-    #     print(f"Error while running Pipeline: {e}")
+        PIPELINE_STATUS = "done"
+        LAST_RUN_TIME = set_last_run_time()
+        
+        print(f"--- PIPELINE COMPLETE. LAST RAN: {LAST_RUN_TIME} ---")
+    except Exception as e:
+        print(f"Error while running Pipeline: {e}")
+        PIPELINE_STATUS = "error"
 
 def start_scheduler():
     global scheduler
+
     scheduler = BackgroundScheduler()
     # Chạy pipeline mỗi ngày lúc 5h sáng
     scheduler.add_job(func=run_pipeline, trigger='cron', hour=5, minute=0, id='daily_crawl')
@@ -74,24 +76,65 @@ def start_scheduler():
 
 @app.route('/')
 def index():
-    plots_folder = 'plots/mongo'
     pollutant_names = ['CO', 'PM-10', 'PM-2-5', 'SO2']
-    plot_files = ['aqi_CO.png', 'aqi_PM-10.png', 'aqi_PM-2-5.png', 'aqi_SO2.png']
-    
-    rendered_plots = []
-    for i, f in enumerate(plot_files):
-        path = os.path.join(app.static_folder, plots_folder, f)
-        exists = os.path.exists(path)
-        rendered_plots.append({'filename': f, 'title': pollutant_names[i], 'exists': exists})
 
-    return render_template('index.html', plots=rendered_plots, last_run=LAST_RUN_TIME)
+    return render_template(
+        'index.html', 
+        pollutant_names=pollutant_names,
+        last_run=LAST_RUN_TIME, 
+        pipeline_status=PIPELINE_STATUS
+    )
 
-@app.route('/run_now')
+# Update run_now to support AJAX request (POST request) - which do not need to re-load the whole page
+@app.route('/run_now', methods=['POST'])
 def run_now():
-    global scheduler
-    flash('Thu thập dữ liệu và tiến hành dự đoán...', 'info')
-    scheduler.add_job(func=run_pipeline, trigger='date', run_date=datetime.now() + timedelta(seconds=1))
-    return redirect(url_for('index'))
+    """
+        This function need to return the data with JSON format instead of redirect and flash.
+        If using redirect and flash, so we need to re-load the whole page...
+        But the run_pipeline function is running in background, so we just need to update when it done => Polling the pipeline status every x seconds.
+    """
+    global scheduler, PIPELINE_STATUS
+    # Do not schedule multiple runs at one time
+    if PIPELINE_STATUS == "running":
+        return jsonify({
+            "status": "warning",
+            "message": "Pipeline is running. Please wait a seconds",
+        })
+
+    PIPELINE_STATUS = "running"
+
+    scheduler.add_job(
+        func=run_pipeline, 
+        trigger='date', 
+        id='manual_run',
+        run_date=datetime.now() + timedelta(seconds=1),
+        replace_existing=True
+    )
+    return jsonify({
+        "status": "success",
+        "message": "Pipeline collect and process data started!"
+    })
+
+@app.route('/pipeline_status', methods=["POST", "GET"])
+def pipeline_status():
+    global PIPELINE_STATUS, LAST_RUN_TIME
+    return jsonify({
+        'PIPELINE_STATUS': PIPELINE_STATUS,
+        'LAST_RUN_TIME': LAST_RUN_TIME,        
+    })
+
+@app.route('/plot_dict')
+def plot_dict():
+    global PLOT_DICT
+    if PLOT_DICT is None:
+        return jsonify({
+            'status': 'error', 
+            'message': 'No plot data available yet!'
+        }, 500)
+
+    return jsonify({
+        "plot_dict": PLOT_DICT
+    })
 
 @app.route('/plots/<filename>')
 def serve_plot(filename):

@@ -7,7 +7,7 @@
 
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-    <script src="https://cdn.plot.ly/plotly-3.4.0.min.js" charset="utf-8"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
 
     <!-- Tailwind CSS CDN (Chính thức) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -54,11 +54,11 @@
       <!-- Header -->
       <header class="text-center mb-10 bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-blue-100">
         <div class="text-center mb-8">
-    <a href="{{ url_for('map_interface') }}" 
-       class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition hover:scale-105 hover:shadow-xl border border-purple-200">
-       <span>🗺️</span> Chuyển sang Nghiên cứu Đa Trạm (Bản đồ)
-    </a>
-</div>
+          <a href="{{ url_for('map_interface') }}" 
+            class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition hover:scale-105 hover:shadow-xl border border-purple-200">
+            <span>🗺️</span> Chuyển sang Nghiên cứu Đa Trạm (Bản đồ)
+          </a>
+        </div>
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-700">Dự Đoán Chất Lượng Không Khí (AQI)</h1>
         <p class="text-gray-600 mt-3 text-lg">Dữ liệu dự đoán 7 ngày tiếp theo</p>
         <p class="text-sm text-gray-500 mt-1">
@@ -73,72 +73,46 @@
             <span class="status-dot"></span> Trạng thái Lịch trình
           </p>
           <p class="text-sm text-blue-900 mt-1">
-            <span class="font-bold text-green-600">Đang hoạt động</span> • Tự động cập nhật lúc <strong>05:00</strong> hàng ngày
+            <span class="font-bold text-green-600">Đang hoạt động</span> • Tự động cập nhật lúc <strong>05:00 AM</strong> hàng ngày
           </p>
           <p class="text-sm text-blue-700 mt-2">
             Lần cập nhật cuối: <span class="font-mono bg-blue-100 px-2 py-1 rounded">{{ last_run }}</span>
           </p>
         </div>
-        <div class="mt-4 md:mt-0">
-          <a href="{{ url_for('run_now') }}" class="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>Chạy Ngay Lập Tức
-          </a>
-        </div>
+
+        <button id="runPipelineBtn" onclick="triggerPipeline()" class="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+          <!-- Adding SVG (Scalable Vector Graphics) into the button-->
+          <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <svg id="spinnerIcon" class="animate-spin -ml-1 mr-2 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span id="btnText">Get the latest data!</span>
+        </button>
       </div>
-
-      <!-- Flash Messages -->
-      {% with messages=get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          <div class="mb-8 space-y-3">
-            {% for category, message in messages %}
-              <div class="flex items-center gap-3 p-4 rounded-xl text-white font-medium shadow-md animate-fade-in
-                            {% if category == 'info' %}
-                  bg-amber-500
-                {% elif category == 'error' %}
-                  bg-red-500
-                {% else %}
-                  bg-blue-500
-                {% endif %}">
-                {% if category == 'error' %}
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                  </svg>
-                {% elif category == 'info' %}
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-4H9z" clip-rule="evenodd" />
-                  </svg>
-                {% endif %}
-                <span>{{ message }}</span>
-              </div>
-            {% endfor %}
-          </div>
-        {% endif %}
-      {% endwith %}
-
+      
       <!-- Plots Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        {% for plot in plots %}
-          <div class="bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl border-t-4 border-blue-500 card-hover">
-            <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-blue-600">Chart</span> {{ plot.title }}</h2>
-            {% if plot.exists %}
-              <div class="relative overflow-hidden rounded-xl border border-gray-200 shadow-inner bg-gray-50">
-                <a href="{{ url_for('serve_plot', filename=plot.filename) }}"><img src="{{ url_for('serve_plot', filename=plot.filename) }}?cache={{ last_run }}" alt="Biểu đồ dự đoán {{ plot.title }}" class="w-full h-auto rounded-xl transition-transform duration-500 hover:scale-105" onerror="this.onerror=null; this.src='https://placehold.co/800x400/e0e7ff/3b82f6?text=Lỗi+tải+biểu+đồ&font=inter'; this.classList.add('opacity-70');" loading="lazy" /></a>
-                <div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/5 to-transparent rounded-xl"></div>
-              </div>
-            {% else %}
-              <div class="h-64 md:h-80 flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl border-2 border-dashed border-gray-400 text-center p-6">
-                <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                </svg>
-                <p class="text-gray-600 font-medium">Chưa có dữ liệu</p>
-                <p class="text-sm text-gray-500 mt-1">
-                  Nhấn nút <strong>Chạy Ngay</strong> để tạo biểu đồ
-                </p>
-              </div>
-            {% endif %}
+      <div class="grid grid-cols-1 gap-8 mb-12"> 
+        {% for pollutant in pollutant_names %}
+          <div class="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border-t-4 border-blue-500 card-hover">
+            <h2 class="text-2xl font-extrabold text-gray-800 mb-6 flex items-center gap-3">
+              <span class="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm">Chỉ số AQI của: </span> 
+              {{ pollutant }}
+            </h2>
+            
+            <div id="chart-{{ pollutant }}" class="w-full h-[500px] relative rounded-xl bg-gray-50/50 flex items-center justify-center overflow-hidden">
+                
+                <div class="flex flex-col items-center justify-center gap-4">
+                    <div class="relative">
+                        <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                    </div>
+                    <span class="text-gray-500 font-medium animate-pulse">Đang tải dữ liệu AQI...</span>
+                </div>
+
+            </div>
           </div>
         {% endfor %}
       </div>
@@ -151,6 +125,8 @@
         <p class="mt-1 text-xs">Dữ liệu được cập nhật tự động • Không dùng cho mục đích y tế</p>
       </footer>
     </div>
+
+    <div id="js-notif-container" class="mb-8 space-y-3"></div>
 
     <!-- Animation Keyframes -->
     <style>
@@ -168,9 +144,243 @@
         animation: fade-in 0.4s ease-out;
       }
     </style>
-  </body>
 
-  <script>
-    // Use Plotly.js to plot from endpoint returned JSON data.
-  </script>
+    <script>
+      let pollingInterval = null;
+
+      // Notif function on UI
+      function showNotification(type, message){
+        const container = document.getElementById('js-notif-container');
+        let bgColor = 'bg-blue-500';
+        let icon = '';
+
+        // Base on each notification type, we create a corresponding bgColor and icon
+        if (type == 'waring'){
+          bgColor = 'bg-yellow-500'
+          icon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 10-2 0v2a1 1 0 102 0v-2zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>`;
+        }
+        else if (type == 'success'){
+          bgColor = 'bg-green-500'
+          icon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>`;
+        }
+        else if (type == 'error'){
+          bgColor = 'bg-red-500'
+          icon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>`;
+        }
+        else {
+          icon = `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-4H9z" clip-rule="evenodd" /></svg>`;
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `flex items-center gap-3 p-4 rounded-xl text-white font-medium shadow-md animate-fade-in ${bgColor}`;
+        toast.innerHTML = `${icon} <span> ${message} </span>`;
+
+        // Remove the old notif 
+        container.innerHTML = '';
+        container.appendChild(toast)
+
+        // Auto remove the notif after 5 secs
+        if (type !== 'error'){
+          setTimeout(() => {toast.remove();}, 5000)
+        }
+      }
+
+      // Function changes the UI status of the button
+      function setButtonState(isRunning){
+        const btn = document.getElementById('runPipelineBtn');
+        const playIcon = document.getElementById('playIcon');
+        const spinner = document.getElementById('spinnerIcon');
+        const btnText = document.getElementById('btnText');
+
+        if (isRunning) {
+          btn.disabled = true;
+          btn.classList.replace('from-green-600', 'from-gray-500');
+          btn.classList.replace('to-emerald-600', 'to-gray-600');
+          playIcon.classList.add('hidden');
+          spinner.classList.remove('hideen');
+          btnText.innerText = "Processing data...";
+        }
+        else{
+          btn.disabled = false;
+          btn.classList.replace('from-gray-500', 'from-green-600');
+          btn.classList.replace('to-gray-600', 'to-emerald-600');
+          spinner.classList.add('hidden')
+          playIcon.classList.remove('hidden') 
+          btnText.innerText = "Get latest data!";
+        }
+      }
+
+      // Function call API trigger the pipeline
+      function triggerPipeline() {
+        fetch("/run_now", {method: 'POST'})
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === "warning") {
+              showNotification("warning", data.message);
+            }
+            else{
+              showNotification("info", data.message);
+              setButtonState(true);
+              startPolling();
+            }
+          })
+          .catch(error => {
+            showNotification("error", "Server connection error!")
+            console.error("Error:", error);
+          })
+      }
+
+      // Polling function, which will call API to check the pipeline status every 5 seconds
+      function startPolling() {
+        if (pollingInterval) clearInterval(pollingInterval);
+
+        pollingInterval = setInterval(() => {
+          fetch("/pipeline_status", {method: "POST"})
+            .then(response => response.json())
+            .then(data => {
+              if (data.PIPELINE_STATUS === "done"){
+                clearInterval(pollingInterval);
+                setButtonState(false);
+                showNotification("success", "Pipeline completed successfully! The charts have been updated.");
+                
+                // Reload after 1.5s to update the latest charts
+                // setTimeout(() => {
+                //   window.location.reload();
+                // }, 1500);
+
+                // Instead of reload page, just need to call function to get new data and plot
+                fetchAndRenderCharts();
+              }
+              else if (data.PIPELINE_STATUS === "error") {
+                clearInterval(pollingInterval);
+                setButtonState(false);
+                showNotification("error", "Error occurred during pipeline execution. Please try again later.");
+              }
+              // If status is still 'running', still awating
+            })
+            .catch(err => {
+              console.error("Error during verify PIPELINE status:", err);
+            });
+        }, 2000);
+      }
+
+      // Function call API to get JSON data to plot using Plotly
+      function fetchAndRenderCharts() {
+        fetch('/plot_dict')
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === "error" || !data.plot_dict){
+              console.log("No data available to plot!");
+              return;
+            }
+
+            const plotData = data.plot_dict;
+            const dates = plotData.dates;
+
+            // Iterate over each pollutant to render
+            plotData.targets.forEach(pollutant => {
+              const values = plotData.values ? plotData.values[pollutant] : null;
+              const elementId = `chart-${pollutant}`;
+              const targetElement = document.getElementById(elementId);
+
+              
+
+              if (!targetElement){
+                console.warn(`Skip plotting ${pollutant} because of missing div id=${elementId}`);
+                return;
+              }
+
+              // 1. Xóa sạch mọi thứ bên trong (Spinner, text cũ)
+              targetElement.innerHTML = ''; 
+              
+              // 2. Ép kiểu hiển thị là block để Plotly tính toán kích thước chuẩn
+              targetElement.style.display = 'block'; 
+              targetElement.style.position = 'relative';
+
+                
+              targetElement.innerHTML = '';
+
+              if (!values) {
+                targetElement.innerHTML = `<span> class="text-gray-400">No data available!</span>`;
+                return;
+              }
+
+              
+
+              // Create a color scheme as we did in the matplotlib
+              const colors = dates.map((_, index) => {
+                if (index === plotData.latest_idx) return 'red';  // Latest date
+                if (index >= plotData.predict_start_idx) return '#ff7f0e';   // Predict 7 days (Orange)
+                return '#1f77b4';  // Historical data (Blue)
+              });
+
+              const trace = {
+                x: dates,
+                y: values,
+                type: 'bar',
+                marker: {
+                  color: colors,
+                  line: {
+                    color: 'black',
+                    width: 1
+                  }
+                },
+                text: values.map(v => v !== null ? v.toFixed(1) : ''), // Show values on top of bars, format to 1 decimal
+                textposition: 'outside',
+                name: pollutant
+              };
+
+              const layout = {
+                  autosize: true, // Tự động co giãn theo thẻ div cha
+                  margin: {
+                      l: 40, // Lề trái vừa đủ để hiện số AQI
+                      r: 10, // Lề phải sát mép
+                      t: 20, // Lề trên nhỏ (vì ta đã có tiêu đề H2 ở ngoài rồi)
+                      b: 40  // Lề dưới vừa đủ để hiện ngày tháng
+                  },
+                  xaxis: {
+                      tickangle: -45,
+                      automargin: true // Tự động tính toán để chữ không bị đè
+                  },
+                  yaxis: {
+                      automargin: true,
+                      fixedrange: true // Khóa zoom trục Y để biểu đồ ổn định
+                  },
+                  paper_bgcolor: 'rgba(0,0,0,0)', // Trong suốt để tiệp màu với Card
+                  plot_bgcolor: 'rgba(0,0,0,0)',
+                  showlegend: false, // Tắt chú thích vì mỗi card chỉ có 1 chất,
+
+                  dragmode: false, // Turn off all interactive modes (zoom, pan) to make it more like a static chart
+              };
+
+              const config = {
+                  responsive: true,      // Co giãn khi đổi kích thước màn hình
+                  displayModeBar: false,  // Tắt thanh công cụ của Plotly để nhìn sạch hơn
+                  scrollzoom: true,
+                  doubleClick: 'reset', // Double click để reset zoom về mặc định
+              };
+                Plotly.newPlot(`${elementId}`, [trace], layout, config);
+                
+            });
+          })
+          .catch(err => console.error("Error during plotting charts:", err));
+      }
+
+      // Status checking right after finished loading page
+      // Necessary when at 5AM, user load the page at the time the scheduled pipeline is running.
+      window.addEventListener('DOMContentLoaded', (event) => {
+        fetchAndRenderCharts();
+
+        fetch('/pipeline_status')
+          .then(res => res.json())
+          .then(data => {
+            if (data.PIPELINE_STATUS === "running"){
+              setButtonState(true);
+              showNotification("info", "System are running background tasks....");
+              startPolling();
+            }
+          });
+      });
+    </script>
+  </body>
 </html>

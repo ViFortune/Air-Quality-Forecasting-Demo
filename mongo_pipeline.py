@@ -2,8 +2,8 @@ import os
 import sys
 import pandas as pd
 import requests
-import torch
 import numpy as np
+import datetime
 import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -21,11 +21,37 @@ load_dotenv(dotenv_path=Path('.env'))
 MONGO_URI = str(os.getenv("MONGO_URI"))
 DB_NAME = str(os.getenv("DB_NAME"))
 COLLECTION_NAME = str(os.getenv("COLLECTION_NAME"))
+LAST_RUN_TIME = str(os.getenv("LAST_RUN_TIME"))
 
 def get_mongo_client():
     from pymongo import MongoClient
     client = MongoClient(host=MONGO_URI)
     return client
+
+def set_last_run_time() -> str:
+    client = get_mongo_client()
+    db = client[DB_NAME]
+    collection = db[LAST_RUN_TIME]
+
+    run_time = datetime.datetime.now().strftime("%H:%M:%S -- %d/%m/%Y")
+    # drop all previous records, we just want to keep the latest run time
+    collection.delete_many({})
+    collection.insert_one({
+        "last_run_time": run_time
+    })
+
+    return run_time
+
+def get_last_run_time() -> str:
+    client = get_mongo_client()
+    db = client[DB_NAME]
+    collection = db[LAST_RUN_TIME]
+
+    record = collection.find_one({
+        "last_run_time": {"$exists": True}
+    })
+
+    return record["last_run_time"] if record else "Have no run yet!"
 
 def crawl_data(date=30, type=0) -> pd.DataFrame:
     '''
@@ -362,6 +388,57 @@ def predict_next_7_days(df: pd.DataFrame, data_dict: Dict[str, List], ckpt_dir: 
 
     return dict_of_list
 
+def get_plot_data(df: pd.DataFrame, dict_of_list: Dict[str, List]):
+    """
+        dict_of_list['CO'].append(CO_pred)
+        dict_of_list['PM-10'].append(PM10_pred)
+        dict_of_list['PM-2-5'].append(PM25_pred)
+        dict_of_list['SO2'].append(SO2_pred)
+    """
+    
+    # transform date into datetime format
+    df.sort_values(by="Date", ascending=False, inplace=True)
+    df['Date'] = pd.to_datetime(df['Date'])
+
+    # get the latest day
+    latest_day = df['Date'].iloc[0]
+    
+    # crate a list: 19 day before + 1 latest day + 7 days after = 27 days
+    day_list = []
+    for i in range(1, 20):
+        day_list.append(latest_day - pd.Timedelta(days=i))
+    day_list.append(latest_day)
+    for i in range(1, 8):
+        day_list.append(latest_day + pd.Timedelta(days=i))
+
+    # sort by date
+    day_list = sorted(day_list)
+    date_str_list = [d.strftime("%Y-%m-%d") for d in day_list]
+
+    # create DataFrame
+    plot_data = pd.DataFrame(dict_of_list, index=date_str_list)
+    plot_data.index.name = 'Date'
+
+    plot_data = plot_data.replace({np.nan: None})
+
+    # Determine the latest day index and the predicted days for plotting task
+    latest_idx = date_str_list.index(latest_day.strftime("%Y-%m-%d"))
+    predict_start_idx = latest_idx + 1
+    predict_end_idx = len(date_str_list)
+    
+    targets = ['CO', 'PM-10', 'PM-2-5', 'SO2']
+
+    # Return primitive 
+    return {
+        'dates': date_str_list,
+        'latest_idx': latest_idx,
+        'predict_start_idx': predict_start_idx,
+        'predict_end_idx': predict_end_idx,
+        'targets': targets,
+        'values': plot_data.to_dict(orient='list'),
+    }
+
+
 def visualize(plot_dir: str, df: pd.DataFrame, dict_of_list: Dict[str, List]):
     # Thiết lập style đẹp
     plt.style.use('seaborn-v0_8')
@@ -372,7 +449,7 @@ def visualize(plot_dir: str, df: pd.DataFrame, dict_of_list: Dict[str, List]):
     # Lấy ngày mới nhất
     latest_day = df['Date'].iloc[0]
 
-    # Tạo danh sách ngày: 19 ngày trước + 1 latest + 7 ngày sau = 37 ngày
+    # Tạo danh sách ngày: 19 ngày trước + 1 latest + 7 ngày sau = 27 ngày
     day_list = []
     for i in range(1, 20):  # base on the n_records of the station
         day_list.append(latest_day - pd.Timedelta(days=i))
@@ -464,7 +541,7 @@ def visualize(plot_dir: str, df: pd.DataFrame, dict_of_list: Dict[str, List]):
 
     print("All 4 separate charts saved successfully!")   
 
-def mongo_pipeline(ckpt_dir, plot_dir):
+def mongo_pipeline(ckpt_dir, plot_dir=None):
     client = get_mongo_client()
     if client is None:
         print("[ERROR]: Failed to connect to MongoDB.")
@@ -495,7 +572,7 @@ def mongo_pipeline(ckpt_dir, plot_dir):
     else:
         print(f"[INFO]: Data for {latest_day} does not exist in MongoDB. Updating the database.")
         records = df.to_dict(orient='records')     # create data as: [{row1}, {row2}, {row3},...,{rowN}]
-        
+
         # Store records into MongoDB as many record => optimize for the large document, but we also query and concate them
         collection.insert_many(records)
     
@@ -503,9 +580,10 @@ def mongo_pipeline(ckpt_dir, plot_dir):
     data_dict = prepare_data(df, date)
 
     dict_of_list = predict_next_7_days(df=df, data_dict=data_dict, ckpt_dir=ckpt_dir)
-    visualize(plot_dir=plot_dir, df=df, dict_of_list=dict_of_list)
+    # visualize(plot_dir=plot_dir, df=df, dict_of_list=dict_of_list)
     
-    
+    return get_plot_data(df=df, dict_of_list=dict_of_list)
 
 if __name__ == "__main__":
-    mongo_pipeline(ckpt_dir='./model_nghia/XGBoost/ckpts/', plot_dir='./static/plots/mongo/')
+    # mongo_pipeline(ckpt_dir='./model_nghia/XGBoost/ckpts/', plot_dir='./static/plots/mongo/')
+    mongo_pipeline(ckpt_dir='./model_nghia/XGBoost/ckpts/')
