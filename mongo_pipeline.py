@@ -495,6 +495,7 @@ def mongo_pipeline(ckpt_dir, plot_dir):
     else:
         print(f"[INFO]: Data for {latest_day} does not exist in MongoDB. Updating the database.")
         records = df.to_dict(orient='records')     # create data as: [{row1}, {row2}, {row3},...,{rowN}]
+        
         # Store records into MongoDB as many record => optimize for the large document, but we also query and concate them
         collection.insert_many(records)
     
