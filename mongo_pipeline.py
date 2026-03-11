@@ -10,6 +10,7 @@ import seaborn as sns
 sys.path.append('.')
 
 from dotenv import load_dotenv
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Dict, Tuple, List
 import matplotlib.pyplot as plt
@@ -33,7 +34,7 @@ def set_last_run_time() -> str:
     db = client[DB_NAME]
     collection = db[LAST_RUN_TIME]
 
-    run_time = datetime.datetime.now().strftime("%H:%M:%S -- %d/%m/%Y")
+    run_time = datetime.datetime.now(ZoneInfo("Asia/Ho_Chi_Minh")).strftime("%H:%M:%S -- %d/%m/%Y")
     # drop all previous records, we just want to keep the latest run time
     collection.delete_many({})
     collection.insert_one({
@@ -180,7 +181,7 @@ def feature_engineering_and_preprocessing(df: pd.DataFrame, region: str) -> pd.D
     df = df.replace('-', pd.NA)     # for interpolation progress
     
     # Transform date into DOW
-    df['Date'] = pd.to_datetime(df["Date"], format='%d/%m/%Y')
+    df.loc[:, 'Date'] = pd.to_datetime(df["Date"], format='%d/%m/%Y')
     month = df['Date'].dt.month
     # print(df['Date'].to_list())
     DOW = df['Date'].dt.day_of_week
@@ -398,7 +399,7 @@ def get_plot_data(df: pd.DataFrame, dict_of_list: Dict[str, List]):
     
     # transform date into datetime format
     df.sort_values(by="Date", ascending=False, inplace=True)
-    df['Date'] = pd.to_datetime(df['Date'])
+    df.loc[:, 'Date'] = pd.to_datetime(df['Date'])
 
     # get the latest day
     latest_day = df['Date'].iloc[0]
@@ -444,7 +445,7 @@ def visualize(plot_dir: str, df: pd.DataFrame, dict_of_list: Dict[str, List]):
     plt.style.use('seaborn-v0_8')
     sns.set_palette("husl")
 
-    df['Date'] = pd.to_datetime(df['Date'])
+    df.loc[:,'Date'] = pd.to_datetime(df['Date'])
 
     # Lấy ngày mới nhất
     latest_day = df['Date'].iloc[0]
